@@ -1,0 +1,65 @@
+name: test-qt-platform
+version: "1"
+summary: Provides a Qt runtime
+description: |
+  Provides a Qt runtime environment for snaps through
+  content slots
+confinement: strict
+base: core18
+grade: stable
+
+slots:
+  qt-platform:
+    interface: content
+    content: qt-platform
+    read:
+    - $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
+  fonts:
+    interface: content
+    content: fonts
+    write:
+    - $SNAP/etc/fonts
+  fonts-usr-share:
+    interface: content
+    content: fonts-usr-share
+    read:
+    - $SNAP/usr/share/fonts
+  qml:
+    interface: content
+    content: qml
+    read:
+    - $SNAP/qml
+  glvnd:
+    interface: content
+    content: glvnd
+    read:
+    - $SNAP/usr/share/glvnd
+
+apps:
+  echo:
+    command: echo.sh
+
+parts:
+
+  qt:
+    plugin: nil
+    stage-packages: 
+      - qtwayland5
+      - qmlscene
+      - qml-module-qtquick-window2 #qtdeclarative5-examples is missing this dep, which is used by various examples
+      - qml-module-qt-labs-folderlistmodel #Another missing dep, needed by photosurface
+      - qml-module-qtquick-controls #Missing dep, needed by photoviewer
+      - libglu1-mesa
+    organize:
+      usr/lib/qt5/bin/qmlscene: qml/qmlscene
+    prime:
+     - qml/qmlscene
+     - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/*.so*
+     - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5
+     - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
+     - usr/share/glvnd/ #provides 50_mesa.json, needed for egl
+     - usr/share/fonts
+
+  launchers:
+    plugin: dump
+    source: launchers
