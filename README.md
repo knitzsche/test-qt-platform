@@ -7,7 +7,9 @@ This snap provides a Qt rutime platform through content interfaces.
 It was built on Ubuntu Bionic and provides the default qt version from the Ubuntu Debian archives. 
 
 Use the snap's `echo` command to inspect the installed enviroment:
+
     $ sudo snap run --shell test-qt-platform.echo
+    $ cd $SNAP
 
 # Shared through snapd content slots
 
