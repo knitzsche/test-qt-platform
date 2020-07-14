@@ -1,5 +1,5 @@
 name: test-qt-platform
-version: "1"
+version: "2"
 summary: Provides a Qt runtime
 description: |
   Provides a Qt runtime environment for snaps through
@@ -14,12 +14,12 @@ slots:
     content: qt-platform
     read:
     - $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET
-  fonts:
+  fonts-etc:
     interface: content
-    content: fonts
+    content: fonts-etc
     write:
-    - $SNAP/etc/fonts
-  fonts-usr-share:
+      - $SNAP/etc/fonts
+  fonts:
     interface: content
     content: fonts-usr-share
     read:
@@ -50,15 +50,19 @@ parts:
       - qml-module-qt-labs-folderlistmodel #Another missing dep, needed by photosurface
       - qml-module-qtquick-controls #Missing dep, needed by photoviewer
       - libglu1-mesa
+      - libpulse-dev # adds libpulse-mainloop-glib.so
+      - libpulse0 # adds libpulsecommon-11.1.so
     organize:
       usr/lib/qt5/bin/qmlscene: qml/qmlscene
     prime:
      - qml/qmlscene
      - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/*.so*
+     - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio/
      - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5
      - usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
      - usr/share/glvnd/ #provides 50_mesa.json, needed for egl
      - usr/share/fonts
+     - etc/fonts
 
   launchers:
     plugin: dump
